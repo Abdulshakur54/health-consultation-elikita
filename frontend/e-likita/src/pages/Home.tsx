@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import doctor from '@/assets/doctor_illustration2.png'
+import {Link} from 'react-router-dom'
 
 export default function Home() {
     return (
@@ -18,9 +18,9 @@ export default function Home() {
                             This guided consultation will help assess your symptoms and provide
                             appropriate healthcare recommendations.
                         </p>
-                        <Button className="bg-blue-600 text-white px-6 py-7 rounded-lg shadow-md hover:bg-blue-700 transition animate-bounce-in">
+                        <Link to='/portal' className="bg-blue-600 text-white px-6 py-7 rounded-lg shadow-md hover:bg-blue-700 transition animate-bounce-in">
                             Start Consultation
-                        </Button>
+                        </Link>
                     </div>
 
                     {/* Illustration */}

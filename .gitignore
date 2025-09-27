@@ -1,0 +1,42 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependency directories
+/backend/node_modules
+/frontend/e-likita/node_modules
+
+# Production builds
+/backend/dist
+/backend/build
+/frontend/e-likita/dist
+/frontend/e-likita/build
+
+# Environment files
+/backend/.env
+/frontend/e-likita/.env
+.env
+.env.local
+.env.*.local
+
+# Coverage
+/backend/coverage
+/frontend/e-likita/coverage
+coverage
+
+# Misc
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+
+# Optional: OS-specific
+ehthumbs.db
+Icon?

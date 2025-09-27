@@ -72,7 +72,7 @@ export function SignupForm({
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={async (data, { resetForm }) =>
+            onSubmit={async (data) =>
               await signup(data)
             }
           >

@@ -6,7 +6,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Link, useNavigate } from "react-router-dom"
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -72,7 +71,7 @@ export function LoginForm({
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={async (data, { resetForm }) =>
+                        onSubmit={async (data) =>
                             await login(data)
                         }
                     >

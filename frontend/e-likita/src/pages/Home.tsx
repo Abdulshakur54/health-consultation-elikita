@@ -18,7 +18,7 @@ export default function Home() {
                             This guided consultation will help assess your symptoms and provide
                             appropriate healthcare recommendations.
                         </p>
-                        <Link to='/portal' className="bg-blue-600 text-white px-6 py-7 rounded-lg shadow-md hover:bg-blue-700 transition animate-bounce-in">
+                        <Link to='/portal' className="bg-blue-600 text-white px-6 py-5 my-3 rounded-lg shadow-md hover:bg-blue-700 transition animate-bounce-in">
                             Start Consultation
                         </Link>
                     </div>

@@ -16,6 +16,8 @@ import TermsOfService from '@/pages/TermsOfService'
 import NAuth from './components/NAuth'
 import Auth from './components/Auth'
 import { Toaster } from 'react-hot-toast'
+import PasswordRequestPage from './pages/PasswordRequest'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
 
@@ -28,6 +30,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="login" element={<NAuth><Login /></NAuth>} />
           <Route path="signup" element={<NAuth><SignUp /></NAuth>} />
+          <Route path="password-request" element={<NAuth><PasswordRequestPage /></NAuth>} />
+          <Route path="reset-password/:token" element={<NAuth><ResetPassword /></NAuth>} />
           <Route path="contact" element={<Contact />} />
           <Route path="termsofservice" element={<TermsOfService />} />
           <Route path="portal" element={<Auth><DashboardLayout /></Auth>}>

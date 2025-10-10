@@ -1,13 +1,7 @@
-import y from 'yup'
 import { ValidationError } from 'yup'
 import User from '../models/User.js'
-import { sphone, sfullName, sobjectId } from '../lib/validator.js'
 import { cloudinary } from '../lib/cloudinary.js'
 import { uploadFile } from '../lib/helper.js'
-
-
-
-
 
 export const updateUser = async (req, res) => {
     console.log(req.file)

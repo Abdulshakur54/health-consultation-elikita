@@ -1,9 +1,5 @@
 import * as Yup from "yup"
-
-// Restrict allowed entity types
-type Entity = "username" | "email" | "password" | "fullname" | "gender" | "dob" | "cpassword"
-
-export default function val(entity: Entity) {
+export default function val(entity) {
     switch (entity) {
         case "fullname":
             return Yup.string()
@@ -31,11 +27,6 @@ export default function val(entity: Entity) {
                 .max(18, "Maximum of 18 characters")
                 .matches(/^[\w!@#$]+$/, "Invalid characters used")
 
-        case "cpassword":
-            return Yup.string()
-                .required("Please confirm your password")
-                .oneOf([Yup.ref("password")], "Passwords must match")
-
         case "gender":
             return Yup.string().required("Required")
                 .transform((value) => value?.toLowerCase())
@@ -45,8 +36,7 @@ export default function val(entity: Entity) {
             return Yup.date().required("Required").max(new Date(), "Cannot be in the future")
 
         default:
-            // `never` makes sure you don’t forget cases
-            const _exhaustiveCheck: never = entity
+            const _exhaustiveCheck = entity
             return _exhaustiveCheck
     }
 }

@@ -19,39 +19,33 @@ import { useContext, useState } from "react"
 import { AuthContext } from "@/contexts/AuthContext"
 import { AxiosError } from "axios"
 
-export function LoginForm({
+export function PasswordRequestForm({
     className,
     ...props
 }: React.ComponentProps<"div">) {
 
     // Formik data
-    const initialValues = { email: "", password: "" };
+    const initialValues = { email: ""};
     const validationSchema = Yup.object({
         email: val("email"),
-        password: val("password"),
     });
 
     const [loading, setLoading] = useState(false)
-    const { api, setToken } = useContext(AuthContext)!
+    const { api } = useContext(AuthContext)!
     const navigate = useNavigate()
 
-    const login = async ({ email, password }: any) => {
+    const handleSubmit = async ({ email }: any) => {
         setLoading(true)
         try {
-            const res = await api.post("/api/v1/auth/login", { email, password });
-            if (res.status === 200) {
-                const {
-                    data: { token },
-                } = res;
-                localStorage.setItem("token", token);
+            const res = await api.post("/api/v1/password-recovery/request-reset", { email });
+            if (res.status === 200 && res.data.success) {
                 toast.success(res.data.message)
-                setToken(token);
-                navigate('/portal')
+                navigate('/login')
             }
         } catch (err: unknown) {
             console.error(err);
             if (err instanceof AxiosError) {
-                toast.error(err.response?.data?.message || "Login failed");
+                toast.error(err.response?.data?.message || "Password Reset request failed");
             } else {
                 toast.error("An unexpected error occurred");
             }
@@ -65,14 +59,14 @@ export function LoginForm({
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle className="text-xl text-blue-800">Login to your account</CardTitle>
+                    <CardTitle className="text-xl text-blue-800">Recover your password</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={async (data) =>
-                            await login(data)
+                            await handleSubmit(data)
                         }
                     >
                         <Form>
@@ -93,39 +87,17 @@ export function LoginForm({
                                         </div>
                                     </div>
 
-                                    {/* Password */}
-                                    <div className="grid gap-3">
-                                        <div className="flex justify-between">
-                                        <span><Label htmlFor="password">Password<Req /></Label></span><span onClick={()=>navigate('/password-request')} className="text-sm hover:underline cursor-pointer text-blue-600 underline-offset-4">Forgot your password?</span>
-                                        </div>
-                                        <div>
-                                            <Field
-                                                name="password"
-                                                id="password"
-                                                type="password"
-                                                className={text}
-                                                placeholder="password"
-                                            />
-                                            <ErrorMessage name="password" component="small" className="text-red-600" />
-                                        </div>
-                                    </div>
                                     {/* Submit Button */}
 
                                     {loading ? (
                                         <Button type="submit" className="w-full bg-blue-700 cursor-not-allowed" disabled>
-                                            <FontAwesomeIcon icon={faSpinner} spin /> Logging in...
+                                            <FontAwesomeIcon icon={faSpinner} spin /> Emailing Reset Link...
                                         </Button>
                                     ) : (
                                         <Button type="submit" className="w-full bg-blue-700 cursor-pointer">
-                                            Login
+                                            Email me a reset link
                                         </Button>
                                     )}
-                                </div>
-                                <div className="text-center text-sm">
-                                    Don&apos;t have an account?{" "}
-                                    <Link to='/signup' className="text-blue-600 underline-offset-4">
-                                        Sign up
-                                    </Link>
                                 </div>
                             </div>
                         </Form>

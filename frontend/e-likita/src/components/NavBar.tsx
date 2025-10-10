@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/e-Likita.png";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const authContext = useContext(AuthContext)
+  const { authUser, logout } = authContext!
 
-  const linkClasses = ({ isActive }: {isActive: boolean}) =>
-    `px-3 py-2 rounded-md transition ${
-      isActive ? "bg-blue-600 text-white" : "hover:bg-blue-50 hover:text-blue-600"
+  const logoutUser = (e: any) => {
+    e.preventDefault()
+    logout()
+  }
+
+  const linkClasses = ({ isActive }: { isActive: boolean }) =>
+    `px-3 py-2 rounded-md transition ${isActive ? "bg-blue-600 text-white" : "hover:bg-blue-50 hover:text-blue-600"
     }`;
 
   return (
@@ -24,8 +31,11 @@ export default function Navbar() {
       {/* Desktop Links */}
       <div className="hidden md:flex gap-4">
         <NavLink to="/" className={linkClasses}>Home</NavLink>
-        <NavLink to="/login" className={linkClasses}>Login</NavLink>
         <NavLink to="/contact" className={linkClasses}>Contact</NavLink>
+        {authUser ?
+          <NavLink to="/logout" className={linkClasses} onClick={logoutUser}>Logout</NavLink> :
+          <NavLink to="/login" className={linkClasses}>Login</NavLink>
+        }
       </div>
 
       {/* Mobile Menu Button */}
@@ -40,8 +50,11 @@ export default function Navbar() {
       {isOpen && (
         <div className="absolute top-16 right-4 bg-white shadow-lg rounded-lg flex flex-col gap-2 p-4 md:hidden">
           <NavLink to="/" className={linkClasses} onClick={() => setIsOpen(false)}>Home</NavLink>
-          <NavLink to="/login" className={linkClasses} onClick={() => setIsOpen(false)}>Login</NavLink>
           <NavLink to="/contact" className={linkClasses} onClick={() => setIsOpen(false)}>Contact</NavLink>
+          {authUser ?
+            <NavLink to="/logout" className={linkClasses} onClick={(e) => { setIsOpen(false); logoutUser(e) }}>Logout</NavLink> :
+            <NavLink to="/login" className={linkClasses} onClick={() => setIsOpen(false)}>Login</NavLink>
+          }
         </div>
       )}
     </nav>

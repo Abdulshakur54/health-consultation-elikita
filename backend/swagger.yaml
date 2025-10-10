@@ -1,0 +1,323 @@
+openapi: 3.0.3
+info:
+  title: E-Likita Health Consultation Application Backend API Documentation
+  version: 1.0.0
+  description: |
+    Comprehensive API documentation fE-Likita Health Consultation Application Backend including authentication,
+    user management, and consultation features.
+
+servers:
+  - url: http://localhost:5000
+
+tags:
+  - name: Authentication
+    description: Endpoints for user registration and login
+  - name: User
+    description: Endpoints for fetching and updating user information
+  - name: Consultation
+    description: Endpoints for creating and retrieving consultations
+
+paths:
+  /api/v1/auth/signup:
+    post:
+      tags: [Authentication]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - fullName
+                - gender
+                - dob
+                - password
+              properties:
+                email:
+                  type: string
+                  example: johndoe@example.com
+                fullName:
+                  type: string
+                  example: John Doe
+                gender:
+                  type: string
+                  example: Male
+                dob:
+                  type: string
+                  example: 1995-06-15
+                password:
+                  type: string
+                  example: secret123
+      responses:
+        "200":
+          description: Account created successfully
+        "400":
+          description: Validation error
+        "500":
+          description: User already exists or server error
+
+  /api/v1/auth/login:
+    post:
+      tags: [Authentication]
+      summary: Log in an existing user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  example: secret123
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Login successful
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid email or password
+        "500":
+          description: Server error
+
+  /api/v1/users/user:
+    get:
+      tags: [User]
+      summary: Get authenticated user details
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Successfully retrieved user information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+
+  /api/v1/users/{id}:
+    put:
+      tags: [User]
+      summary: Update user profile picture
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The user's unique ID
+          schema:
+            type: string
+            example: 6510d7342f12c3a8a5dc431b
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                profilePic:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Profile picture updated successfully
+        "400":
+          description: Validation error
+        "404":
+          description: User not found
+        "500":
+          description: Internal server error
+
+  /api/v1/consultations:
+    post:
+      tags: [Consultation]
+      summary: Submit a new consultation form
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Consultation"
+      responses:
+        "200":
+          description: Consultation submitted successfully
+        "500":
+          description: Internal server error
+
+    get:
+      tags: [Consultation]
+      summary: Get all consultations for the authenticated user
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Successfully retrieved consultations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      consultations:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/ConsultationSummary"
+
+  /api/v1/consultations/{id}:
+    get:
+      tags: [Consultation]
+      summary: Get a specific consultation by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The consultation ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Consultation retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Consultation"
+        "404":
+          description: Consultation not found
+        "500":
+          description: Server error
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6510d7342f12c3a8a5dc431b
+        email:
+          type: string
+          example: johndoe@example.com
+        fullName:
+          type: string
+          example: John Doe
+        gender:
+          type: string
+          example: Male
+        dob:
+          type: string
+          example: 1995-06-15
+        profilePic:
+          type: string
+          example: https://res.cloudinary.com/demo/image/upload/v1697043031/profile.jpg
+        createdAt:
+          type: string
+          example: 2025-10-10T10:00:00.000Z
+        updatedAt:
+          type: string
+          example: 2025-10-10T10:05:00.000Z
+
+    Consultation:
+      type: object
+      properties:
+        medicalHistory:
+          type: array
+          items:
+            type: string
+          example: ["Asthma", "Hypertension"]
+        medication:
+          type: string
+          example: Paracetamol
+        symptoms:
+          type: array
+          items:
+            type: string
+          example: ["Cough", "Headache"]
+        symptomDuration:
+          type: string
+          example: "2 days"
+        painLevel:
+          type: number
+          example: 7
+        additionalDetails:
+          type: string
+          example: Patient reports mild fever in the evening.
+        breathingSudden:
+          type: string
+          enum: ["Yes", "No", ""]
+          example: "No"
+        breathingActivity:
+          type: string
+          enum: ["Yes", "No", ""]
+          example: "Yes"
+        painLocation:
+          type: string
+          example: "Chest"
+        painDescription:
+          type: string
+          example: "Sharp pain when breathing deeply"
+
+    ConsultationSummary:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 6532ab8d9b8fdf3a72f119ab
+        medication:
+          type: string
+          example: Paracetamol
+        symptomDuration:
+          type: string
+          example: "2 days"
+        painLevel:
+          type: number
+          example: 5

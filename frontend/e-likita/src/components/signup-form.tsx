@@ -169,11 +169,11 @@ export function SignupForm({
                   {/* Submit Button */}
 
                   {loading ? (
-                    <Button type="submit" className="w-full bg-blue-700">
+                    <Button type="submit" className="w-full bg-blue-700 cursor-not-allowed" disabled>
                       <FontAwesomeIcon icon={faSpinner} spin /> Signing in...
                     </Button>
                   ) : (
-                    <Button type="submit" className="w-full bg-blue-700">
+                    <Button type="submit" className="w-full bg-blue-700 cursor-pointer">
                       Sign Up
                     </Button>
                   )}

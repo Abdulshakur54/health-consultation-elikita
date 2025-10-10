@@ -35,6 +35,9 @@ export default function val(entity) {
         case "dob":
             return Yup.date().required("Required").max(new Date(), "Cannot be in the future")
 
+        case "text":
+            return Yup.string().matches(/[\w .?(),]+/, "Not allowed characters present")
+
         default:
             const _exhaustiveCheck = entity
             return _exhaustiveCheck

@@ -82,6 +82,8 @@ export const generateResetPasswordHtml = (companyName, recipientName, resetLink)
             </html>
 `
 }
+
+
 export const generateResetPasswordSuccessHtml = (companyName, recipientName) => {
     return `<!DOCTYPE html>
             <html>
@@ -115,6 +117,57 @@ export const generateResetPasswordSuccessHtml = (companyName, recipientName) => 
                         
                         <p>
                             Have a great day!
+                        </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background:#f0f0f0; padding:15px; text-align:center; font-size:12px; color:#888888;">
+                        &copy; ${new Date().getFullYear()} ${companyName}. All rights reserved.
+                        </td>
+                    </tr>
+                    
+                    </table>
+                </td>
+                </tr>
+            </table>
+            </body>
+            </html>
+`
+}
+
+export const generateContactMessageHtml = (companyName, recipientName) => {
+    return `<!DOCTYPE html>
+            <html>
+            <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>Email Message</title>
+            </head>
+            <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f5f7fa;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f7fa; padding:40px 0;">
+                <tr>
+                <td align="center">
+                    <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); overflow:hidden;">
+                    
+                    <!-- Header with Logo -->
+                    <tr>
+                        <td style="background:#4A90E2; padding:20px; text-align:center;">
+                        <h1>${companyName}</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:30px; color:#333333; font-size:16px; line-height:1.6;">
+                        <h2 style="margin-top:0; color:#4A90E2;">Message Received</h2>
+                        <p>Hi ${recipientName},</p>
+                        <p>
+                            We received your message. We will get back to you soon.
+                        </p>
+                        <p>
+                           Best Regards
                         </p>
                         </td>
                     </tr>

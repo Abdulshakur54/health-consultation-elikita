@@ -3,7 +3,8 @@ import y, { ValidationError } from 'yup'
 import { semail, spassword, sfullName, sgender, sdate } from "../lib/validator.js"
 import bcrypt from "bcryptjs"
 import { generateToken } from "../lib/utils.js"
-
+import val from '../lib/functions.js'
+import { generateContactMessageHtml, sendEmail } from '../lib/nodemail.js'
 export const signUp = async (req, res) => {
     const { email, fullName, password, gender, dob } = req.body
     const schema = y.object({
@@ -18,7 +19,7 @@ export const signUp = async (req, res) => {
             if (user) {
                 res.status(500).json({ message: "User with this email exist", success: false })
             } else {
-                const newUser = await User.create({ email, fullName, password: hashedPassword, gender, dob})
+                const newUser = await User.create({ email, fullName, password: hashedPassword, gender, dob })
                 res.status(200).json({
                     success: true, message: "Account created successfully",
                     data: { email: newUser.email, fullName: newUser.fullName, gender: newUser.gender, dob: newUser.dob, createdAt: newUser.createdAt, updatedAt: newUser.updatedAt }
@@ -28,7 +29,7 @@ export const signUp = async (req, res) => {
 
 
     } catch (e) {
-      
+
         if (e instanceof ValidationError) {
             res.status(400).json({ success: false, message: e.errors })
         } else {
@@ -53,13 +54,43 @@ export const login = async (req, res) => {
             const user = await User.findOne({ email })
             if (await bcrypt.compare(password, user.password)) {
                 const token = generateToken(user._id)
-                res.status(200).json({ success: true, message: "Login successfully", token, data: {user}})
-            }else{
-                 res.status(400).json({ success: false, message: "Email and password did not match" })
+                res.status(200).json({ success: true, message: "Login successfully", token, data: { user } })
+            } else {
+                res.status(400).json({ success: false, message: "Email and password did not match" })
             }
         }
     } catch (e) {
-       
+
+        if (e instanceof ValidationError) {
+            res.status(400).json({ success: false, message: e.errors })
+        } else {
+            res.status(500).json({ success: false, message: e.message })
+        }
+    }
+}
+
+
+export const contactUs = async (req, res) => {
+    const { fullName, email, message } = req.body
+    const schema = y.object({
+        fullName: val('fullname'),
+        email: val("email"),
+        message: val("text"),
+    })
+    try {
+        const valData = await schema.validate({ fullName, email, message })
+        {
+            const { fullName, email, message } = valData
+            const htmlMessage = generateContactMessageHtml('E-Likita Health Consultation', fullName)
+            if (await sendEmail('E-Likita Health Consultation', email, 'We Received your Message', htmlMessage)) {
+                await sendEmail('E-Likita Health Consultation', 'mabdulshakur54@gmail.com', 'Message from E-Likita', message)
+                res.status(200).json({ success: true, message: 'Message sent successfully' })
+            } else {
+                res.status(500).json({ success: false, message: "Unable to send message" })
+            }
+        }
+    } catch (e) {
+        console.log(e)
         if (e instanceof ValidationError) {
             res.status(400).json({ success: false, message: e.errors })
         } else {

@@ -6,6 +6,7 @@ import { authRouter } from "./routes/authRoute.js";
 import { consultationRouter } from "./routes/consultationRouter.js";
 import { verifyToken } from "./middlewares/auth.js";
 import { userRouter } from "./routes/userRoute.js";
+import { publicRoute } from "./routes/publicRoute.js";
 import { passwordRecoveryRouter } from "./lib/passwordRecovery.js";
 import swaggerUi from 'swagger-ui-express';
 import getSwaggerSpec from './swagger.js';
@@ -22,6 +23,7 @@ app.get("/api/v1/status", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/public", publicRoute);
 app.use("/api/v1/consultations", verifyToken, consultationRouter);
 app.use("/api/v1/users", verifyToken, userRouter);
 app.use("/api/v1/password-recovery", passwordRecoveryRouter);

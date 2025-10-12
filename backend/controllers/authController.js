@@ -3,8 +3,6 @@ import y, { ValidationError } from 'yup'
 import { semail, spassword, sfullName, sgender, sdate } from "../lib/validator.js"
 import bcrypt from "bcryptjs"
 import { generateToken } from "../lib/utils.js"
-import val from '../lib/functions.js'
-import { generateContactMessageHtml, sendEmail } from '../lib/nodemail.js'
 export const signUp = async (req, res) => {
     const { email, fullName, password, gender, dob } = req.body
     const schema = y.object({
@@ -70,32 +68,5 @@ export const login = async (req, res) => {
 }
 
 
-export const contactUs = async (req, res) => {
-    const { fullName, email, message } = req.body
-    const schema = y.object({
-        fullName: val('fullname'),
-        email: val("email"),
-        message: val("text"),
-    })
-    try {
-        const valData = await schema.validate({ fullName, email, message })
-        {
-            const { fullName, email, message } = valData
-            const htmlMessage = generateContactMessageHtml('E-Likita Health Consultation', fullName)
-            if (await sendEmail('E-Likita Health Consultation', email, 'We Received your Message', htmlMessage)) {
-                await sendEmail('E-Likita Health Consultation', 'mabdulshakur54@gmail.com', 'Message from E-Likita', message)
-                res.status(200).json({ success: true, message: 'Message sent successfully' })
-            } else {
-                res.status(500).json({ success: false, message: "Unable to send message" })
-            }
-        }
-    } catch (e) {
-        console.log(e)
-        if (e instanceof ValidationError) {
-            res.status(400).json({ success: false, message: e.errors })
-        } else {
-            res.status(500).json({ success: false, message: e.message })
-        }
-    }
-}
+
 

@@ -1,7 +1,7 @@
 import * as Yup from "yup"
 
 // Restrict allowed entity types
-type Entity = "username" | "email" | "password" | "fullname" | "gender" | "dob" | "cpassword"
+type Entity = "username" | "email" | "password" | "fullname" | "gender" | "dob" | "cpassword" | "text"
 
 export default function val(entity: Entity) {
     switch (entity) {
@@ -43,6 +43,9 @@ export default function val(entity: Entity) {
 
         case "dob":
             return Yup.date().required("Required").max(new Date(), "Cannot be in the future")
+            
+        case "text":
+            return Yup.string().matches(/[\w .?(),]+/, "Not allowed characters present")
 
         default:
             // `never` makes sure you don’t forget cases

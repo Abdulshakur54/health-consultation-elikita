@@ -31,7 +31,7 @@ function App() {
           <Route path="login" element={<NAuth><Login /></NAuth>} />
           <Route path="signup" element={<NAuth><SignUp /></NAuth>} />
           <Route path="password-request" element={<NAuth><PasswordRequestPage /></NAuth>} />
-          <Route path="reset-password/:token" element={<NAuth><ResetPassword /></NAuth>} />
+          <Route path="/reset-password/:token" element={<NAuth><ResetPassword /></NAuth>} />
           <Route path="contact" element={<Contact />} />
           <Route path="termsofservice" element={<TermsOfService />} />
           <Route path="portal" element={<Auth><DashboardLayout /></Auth>}>

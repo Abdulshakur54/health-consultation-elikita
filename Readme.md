@@ -60,60 +60,6 @@ E-Likita is a modern **Health Consultation Web Application** designed to provide
 
 ---
 
-## 🧑‍💻 Installation & Setup
-
-### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/Abdulshakur54/health-consultation.git
-cd health-consultation
-```
-
-### 2️⃣ Backend Setup
-```bash
-cd backend
-npm install
-```
-Create a `.env` file inside `backend` with the following variables:
-```env
-PORT=5000
-MONGO_URI=your_mongo_db_uri
-JWT_SECRET=your_jwt_secret
-CLOUDINARY_CLOUD_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-EMAIL_USER=your_email@example.com
-EMAIL_PASS=your_email_password
-RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
-```
-
-Run the backend:
-```bash
-npm run dev
-```
-
-### 3️⃣ Frontend Setup
-```bash
-cd ../frontend
-npm install
-npm run dev
-```
-Then open your browser and visit:
-```
-http://localhost:5173
-```
-
----
-
-## 🧪 API Documentation
-
-Comprehensive API documentation is available via Swagger.
-
-Once your server is running locally, visit:
-```
-http://localhost:5000/api-docs
-```
-
----
 
 ## 📬 Contact
 
@@ -121,7 +67,6 @@ If you’d like to connect, collaborate, or reach out for support, feel free to 
 
 - **GitHub:** [https://github.com/Abdulshakur54](https://github.com/Abdulshakur54)
 - **LinkedIn:** [https://www.linkedin.com/in/abdulshakurmuhammed/](https://www.linkedin.com/in/abdulshakurmuhammed/)
-- **Email:** yourname@example.com
 
 The platform also includes a built-in **Contact Form** allowing visitors to send emails directly, secured with **Google reCAPTCHA** (“I am not a robot”) verification.
 

@@ -8,10 +8,9 @@ import bcrypt from "bcryptjs";
 
 
 const users = process.env.PASSWORD_RECOVERY_USER_COLLECTION
+const companyName = process.env.PASSWORD_RECOVERY_COMPANY_NAME
 const expiryMinutes = parseInt(process.env.PASSWORD_RECOVERY_EXPIRY_TIME || "15", 10); // default to 15 if not set
 const expiresOn = new Date(Date.now() + expiryMinutes * 60 * 1000).toISOString();
-
-
 const frontendURL = process.env.PASSWORD_RECOVERY_FRONTEND_URL
 
 const passwordRecoverySchema = new Schema({
@@ -39,8 +38,8 @@ const requestReset = async (req, res) => {
             await PasswordRecovery.create({ email: data.email, hashedToken, expiresOn }) // save hashed token to the collection
             const name = result?.firstName || result?.fullName || result?.name
             const resetLink = `${frontendURL}/reset-password/${token}`;
-            const htmlMessage = generateResetPasswordHtml('E-Likita Health Consultation', name, resetLink)
-            if (await sendEmail('E-Likita Health Consultation', data.email, 'Reset Your Password', htmlMessage)) {
+            const htmlMessage = generateResetPasswordHtml(companyName, name, resetLink)
+            if (await sendEmail(companyName, data.email, 'Reset Your Password', htmlMessage)) {
                 res.status(200).json({ success: true, message: 'A reset link has been sent to your email if your account is found' })
             } else {
                 res.status(500).json({ success: false, message: "Unable to send Email to reset password" })
@@ -64,7 +63,7 @@ const requestReset = async (req, res) => {
 
 const resetPassword = async (req, res) => {
     try {
-        let { password, token } = req.body
+        let { password, token} = req.body
         const rawData = object({ password: val('password') })
         const data = await rawData.validate({ password })
         password = data.password
@@ -90,8 +89,8 @@ const resetPassword = async (req, res) => {
         //get the name of the user from the provided user table
         let result = await model(users).findOne({ email })
         const name = result?.firstName || result?.fullName || result?.name
-        const htmlMessage = generateResetPasswordSuccessHtml('E-Likita Health Consultation', name)
-        await sendEmail('E-Likita Health Consultation', email, 'Password Reset Notification', htmlMessage)
+        const htmlMessage = generateResetPasswordSuccessHtml(companyName, name)
+        await sendEmail(companyName, email, 'Password Reset Notification', htmlMessage)
         res.status(200).json({ success: true, message: "Password successfully reset" })
     } catch (e) {
         console.log(e)

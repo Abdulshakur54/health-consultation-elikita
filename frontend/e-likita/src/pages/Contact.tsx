@@ -10,9 +10,7 @@ import { AuthContext } from "@/contexts/AuthContext"
 import { AxiosError } from "axios"
 import toast from "react-hot-toast";
 import ReCAPTCHA from "react-google-recaptcha";
-import test from "node:test";
 const recapthaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string
-const recaptchaSecret = import.meta.env.VITE_RECAPTCHA_SECRET_KEY as string
 
 
 export default function Contact() {
@@ -38,6 +36,7 @@ export default function Contact() {
         const res = await api.post("/api/v1/public/contactus", { fullName, email, message, captchaData: recaptchaRsp });
         if (res.status === 200) {
           toast.success(res.data.message)
+          toast.success('Do check your spam folder for our automated response if not seen in your Inbox', {duration: 10000})
           navigate('/')
         }
       } catch (err: unknown) {

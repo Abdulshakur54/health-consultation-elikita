@@ -50,11 +50,15 @@ export const login = async (req, res) => {
         {
             const { email, password } = valData
             const user = await User.findOne({ email })
-            if (await bcrypt.compare(password, user.password)) {
-                const token = generateToken(user._id)
-                res.status(200).json({ success: true, message: "Login successfully", token, data: { user } })
+            if (user) {
+                if (await bcrypt.compare(password, user.password)) {
+                    const token = generateToken(user._id)
+                    res.status(200).json({ success: true, message: "Login successfully", token, data: { user } })
+                } else {
+                    res.status(400).json({ success: false, message: "Email and password did not match" })
+                }
             } else {
-                res.status(400).json({ success: false, message: "Email and password did not match" })
+                res.status(400).json({ success: false, message: "You are yet to register an account with us" })
             }
         }
     } catch (e) {
